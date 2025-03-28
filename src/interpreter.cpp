@@ -1,16 +1,21 @@
 #include "interpreter.h"
+#include <algorithm>
 #include <cmath>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_set>
 
-int Interpreter::countVariables() {
-    int count = 0;
+std::vector<Token> Interpreter::getVariableTokens() {
+    std::vector<Token> variableTokens;
+    std::unordered_set<std::string> seenNames;
+
     for (auto& tok : infixTokens) {
-        if (tok.isVariable()) {
-            count++;
+        if (tok.isVariable() && (seenNames.find(tok.getValue()) == seenNames.end())) {
+            variableTokens.push_back(tok);
+            seenNames.insert(tok.getValue());
         }
     }
-    return count;
+    return std::vector<Token>(variableTokens.begin(), variableTokens.end());
 }
 
 void Interpreter::convertToPostfix() {
@@ -114,7 +119,11 @@ double Interpreter::evalPostfix() {
 
 Interpreter::Interpreter(std::vector<Token> tokens) : infixTokens(tokens) {
     convertToPostfix();
-    this->variableCount = countVariables();
+    auto variableTokens = getVariableTokens();
+    std::vector<std::string> varNames(variableTokens.size());
+    std::transform(variableTokens.begin(), variableTokens.end(),
+                   varNames.begin(), [](Token t) { return t.getValue(); });
+    variableNames = varNames;
 };
 
 std::string Interpreter::getPostfix() {
@@ -145,6 +154,15 @@ std::string Interpreter::getInfix() {
         }
     }
     return expr.top();
+}
+
+std::string Interpreter::getVariables() {
+    std::stringstream ss;
+    for (auto &var : variableNames)
+    {
+        ss << var << " ";
+    }
+    return ss.str();
 }
 
 double Interpreter::evaluate() { return evalPostfix(); }

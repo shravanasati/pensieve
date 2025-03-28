@@ -11,9 +11,9 @@ private:
     std::vector<Token> infixTokens;
     std::vector<Token> postfixTokens;
     std::stack<Token> operatorStack;
-	int variableCount;
+	std::vector<std::string> variableNames;
 
-	int countVariables();
+	std::vector<Token> getVariableTokens();
     void convertToPostfix();
     long double resolveOperator(Token token, std::stack<long double>& operands);
     double evalPostfix();
@@ -22,6 +22,7 @@ public:
     Interpreter(std::vector<Token> tokens);
     std::string getPostfix();
     std::string getInfix();
+    std::string getVariables();
     double evaluate();
 };
 
