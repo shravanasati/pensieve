@@ -3,13 +3,23 @@
 #include <sstream>
 #include <stdexcept>
 
+int Interpreter::countVariables() {
+    int count = 0;
+    for (auto& tok : infixTokens) {
+        if (tok.isVariable()) {
+            count++;
+        }
+    }
+    return count;
+}
+
 void Interpreter::convertToPostfix() {
     for (auto& token : infixTokens) {
         auto tokenType = token.getTokenType();
         auto tokenPrecedence = token.getPrecedence();
         auto tokenAssoc = token.getAssociativity();
 
-        if (tokenType == TokenType::NUMBER) {
+        if (tokenType == TokenType::VARIABLE) {
             postfixTokens.push_back(token);
         } else {
             if (operatorStack.empty() || tokenType == TokenType::LPAREN) {
@@ -63,8 +73,7 @@ long double Interpreter::resolveOperator(Token token,
     if (token.isUnaryOperator()) {
         auto num = operands.top();
         operands.pop();
-        auto sign = (token.getTokenType() == TokenType::UNARY_PLUS_OP) ? 1 : -1;
-        return sign * num;
+        return num;
     }
 
     auto tokenType = token.getTokenType();
@@ -73,24 +82,15 @@ long double Interpreter::resolveOperator(Token token,
     auto num1 = operands.top();
     operands.pop();
     switch (tokenType) {
-    case TokenType::PLUS_OP:
+    case TokenType::OR_OP:
         return (num1 + num2);
         break;
-    case TokenType::MINUS_OP:
-        return (num1 - num2);
-        break;
 
-    case TokenType::MULTIPLY_OP:
+    case TokenType::AND_OP:
         return (num1 * num2);
         break;
-    case TokenType::DIVIDE_OP:
-        return (num1 / num2);
-        break;
-    case TokenType::FLOOR_DIVIDE_OP:
-        return (int(num1 / num2));
-        break;
 
-    case TokenType::EXPONENT_OP:
+    case TokenType::XOR_OP:
         return (pow(num1, num2));
         break;
 
@@ -103,7 +103,7 @@ long double Interpreter::resolveOperator(Token token,
 double Interpreter::evalPostfix() {
     std::stack<long double> operands;
     for (auto token : postfixTokens) {
-        if (token.isNumber()) {
+        if (token.isVariable()) {
             operands.push(std::stold(token.getValue()));
         } else {
             operands.push(resolveOperator(token, operands));
@@ -114,6 +114,7 @@ double Interpreter::evalPostfix() {
 
 Interpreter::Interpreter(std::vector<Token> tokens) : infixTokens(tokens) {
     convertToPostfix();
+    this->variableCount = countVariables();
 };
 
 std::string Interpreter::getPostfix() {
@@ -127,14 +128,12 @@ std::string Interpreter::getPostfix() {
 std::string Interpreter::getInfix() {
     std::stack<std::string> expr;
     for (auto& token : postfixTokens) {
-        if (token.isNumber()) {
+        if (token.isVariable()) {
             expr.push(token.getValue());
         } else if (token.isUnaryOperator()) {
             auto e1 = expr.top();
             expr.pop();
-            std::string sign =
-                (token.getTokenType() == TokenType::UNARY_PLUS_OP) ? "+" : "-";
-            auto e = sign + "(" + e1 + ")";
+            auto e = "!(" + e1 + ")";
             expr.push(e);
         } else {
             auto e2 = expr.top();

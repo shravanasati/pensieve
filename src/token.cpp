@@ -14,51 +14,31 @@ bool Token::operator==(const Token& other) const {
     return tokenType == other.tokenType;
 }
 
-bool Token::isNumber() { return tokenType == TokenType::NUMBER; }
+bool Token::isVariable() { return tokenType == TokenType::VARIABLE; }
 
-bool Token::isUnaryOperator() {
-    return tokenType == TokenType::UNARY_PLUS_OP ||
-           tokenType == TokenType::UNARY_MINUS_OP;
-}
+bool Token::isUnaryOperator() { return tokenType == TokenType::NEGATION_OP; }
 
 bool Token::isParen() {
     return tokenType == TokenType::LPAREN || tokenType == TokenType::RPAREN;
 }
 
-Token NumberToken(std::string value) {
-    return Token(value, TokenType::NUMBER, 0, Associativity::LEFT);
+Token VariableToken(std::string name) {
+    return Token(name, TokenType::VARIABLE, 0, Associativity::LEFT);
 }
 
-Token UnaryPlusToken() {
-    return Token("+", TokenType::UNARY_PLUS_OP, 3, Associativity::RIGHT);
+Token NegationToken() {
+    return Token("!", TokenType::NEGATION_OP, 4, Associativity::RIGHT);
 }
 
-Token UnaryMinusToken() {
-    return Token("-", TokenType::UNARY_MINUS_OP, 3, Associativity::RIGHT);
+Token OrToken() { return Token("|", TokenType::OR_OP, 1, Associativity::LEFT); }
+
+
+Token AndToken() {
+    return Token("&", TokenType::AND_OP, 3, Associativity::LEFT);
 }
 
-Token PlusToken() {
-    return Token("+", TokenType::PLUS_OP, 1, Associativity::LEFT);
-}
-
-Token MinusToken() {
-    return Token("-", TokenType::MINUS_OP, 1, Associativity::LEFT);
-}
-
-Token MultiplyToken() {
-    return Token("*", TokenType::MULTIPLY_OP, 2, Associativity::LEFT);
-}
-
-Token DivideToken() {
-    return Token("/", TokenType::DIVIDE_OP, 2, Associativity::LEFT);
-}
-
-Token FloorDivideToken() {
-    return Token("//", TokenType::FLOOR_DIVIDE_OP, 2, Associativity::LEFT);
-}
-
-Token ExponentToken() {
-    return Token("^", TokenType::EXPONENT_OP, 3, Associativity::RIGHT);
+Token XorToken() {
+    return Token("^", TokenType::XOR_OP, 2, Associativity::LEFT);
 }
 
 Token LPARENToken() {

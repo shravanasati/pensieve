@@ -7,50 +7,7 @@ void Lexer::advance() {
     currentChar = infix.at(position);
 }
 
-bool Lexer::isDigit(char c) { return c >= '0' && c <= '9'; }
-
-bool Lexer::isDecimal(char c) { return c == '.'; }
-
-makeTokenResult Lexer::makeNumberToken() {
-    std::string number;
-    int decimalCount = 0;
-    while (true) {
-        if (isDigit(currentChar) || isDecimal(currentChar)) {
-            number += currentChar;
-            if (isDecimal(currentChar)) {
-                decimalCount++;
-            }
-            if (decimalCount > 1) {
-                reportError("multiple decimals in a number");
-                return makeTokenResult{NumberToken("0"), false};
-            }
-            try {
-                advance();
-            } catch (std::out_of_range) {
-                return makeTokenResult{NumberToken(number), true};
-            }
-        } else {
-            // since current char is not a digit or a decimal
-            // it maybe a operator which will be advanced upon
-            // inside the loop, so decrease the position by 1
-            position--;
-            break;
-        }
-    }
-    // convert .52 => 0.52
-    if (number[0] == '.') {
-        number = "0" + number;
-    }
-    // convert 52. => 52.0
-    if (number.at(number.size() - 1) == '.') {
-        number += "0";
-    }
-    // convert 52 => 52.0
-    if (decimalCount == 0) {
-        number += ".0";
-    }
-    return makeTokenResult{NumberToken(number), true};
-}
+bool Lexer::isVariable(char c) { return c >= 'a' && c <= 'z'; }
 
 void Lexer::reportError(std::string error, int offset) {
     if (offset < 0) {
@@ -76,53 +33,14 @@ std::vector<Token> Lexer::tokenize() {
             goto next;
         }
 
-        if (currentChar == '+') {
-            auto n = tokens.size();
-            if (n == 0) {
-                tokens.push_back(UnaryPlusToken());
-            } else {
-                auto lastTokenType = tokens[n - 1].getTokenType();
-                if (lastTokenType == TokenType::NUMBER ||
-                    lastTokenType == TokenType::RPAREN) {
-                    tokens.push_back(PlusToken());
-                } else {
-                    tokens.push_back(UnaryPlusToken());
-                }
-            }
-        } else if (currentChar == '-') {
-            auto n = tokens.size();
-            if (n == 0) {
-                tokens.push_back(UnaryMinusToken());
-            } else {
-                auto lastTokenType = tokens[n - 1].getTokenType();
-                if (lastTokenType == TokenType::NUMBER ||
-                    lastTokenType == TokenType::RPAREN) {
-                    tokens.push_back(MinusToken());
-                } else {
-                    tokens.push_back(UnaryMinusToken());
-                }
-            }
-        } else if (currentChar == '*') {
-            tokens.push_back(MultiplyToken());
-        } else if (currentChar == '/') {
-            if (position == (infix.length() - 1)) {
-                // no need to check for floor division if the end of input
-                // is reached
-                tokens.push_back(DivideToken());
-            } else {
-                // try advancing to check for floor division operator
-                advance();
-                if (currentChar == '/') {
-                    tokens.push_back(FloorDivideToken());
-                } else {
-                    tokens.push_back(DivideToken());
-                    // go back one character since we advanced once more to
-                    // check next character
-                    position--;
-                }
-            }
+        if (currentChar == '|') {
+            tokens.push_back(OrToken());
+        } else if (currentChar == '!') {
+            tokens.push_back(NegationToken());
+        } else if (currentChar == '&') {
+            tokens.push_back(AndToken());
         } else if (currentChar == '^') {
-            tokens.push_back(ExponentToken());
+            tokens.push_back(XorToken());
         } else if (currentChar == '(') {
             tokens.push_back(LPARENToken());
             bracketPositions.push(position);
@@ -134,12 +52,8 @@ std::vector<Token> Lexer::tokenize() {
             }
             tokens.push_back(RPARENToken());
             bracketPositions.pop();
-        } else if (isDigit(currentChar) || isDecimal(currentChar)) {
-            auto numberTokenResult = makeNumberToken();
-            if (!numberTokenResult.success) {
-                return std::vector<Token>{};
-            }
-            tokens.push_back(numberTokenResult.token);
+        } else if (isVariable(currentChar)) {
+            tokens.push_back(VariableToken(std::to_string(currentChar)));
         } else {
             reportError("invalid character");
             return std::vector<Token>{};
@@ -148,13 +62,13 @@ std::vector<Token> Lexer::tokenize() {
         {
             // * new scope to allow control transfer from goto
             auto lastToken = tokens.back();
-            auto isNumber = lastToken.isNumber();
+            auto isVariable = lastToken.isVariable();
             auto isParen = lastToken.isParen();
             auto isUnary = lastToken.isUnaryOperator();
             if (isUnary) {
                 // ignore unary operators in rank calculation
                 goto next;
-            } else if (isNumber) {
+            } else if (isVariable) {
                 rank++;
             } else if (!isParen) {
                 rank--;

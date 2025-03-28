@@ -7,11 +7,6 @@
 #include <string>
 #include <vector>
 
-struct makeTokenResult {
-    Token token;
-    bool success;
-};
-
 class Lexer {
 private:
     const std::string& infix;
@@ -21,9 +16,7 @@ private:
     std::stack<int> bracketPositions;
 
     void advance();
-    bool isDigit(char c);
-    bool isDecimal(char c);
-    makeTokenResult makeNumberToken();
+    bool isVariable(char c);
     void reportError(std::string error, int offset = -1);
 
 public:
