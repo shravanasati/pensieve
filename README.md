@@ -1,20 +1,24 @@
 # pensieve
 
-A simple math interpreter written in C++ using the Shunting-yard algorithm.
-
-Watch the [demo video](https://youtu.be/KPOjq7f3VuU).
+A simple truth-table generator written in C++. Expression parsing is performed using the Shunting-yard algorithm.
 
 ### Working mechanism
 
-pensieve first tokenizes the given input and classifies them into numbers, operators, parentheses and so on. During this operation, it also validates the input and checks for invalid expressions like missing operators/operands/parentheses and so on.
+pensieve first tokenizes the given input and classifies them into variables, operators, and parentheses. During this operation, it also validates the input and checks for invalid expressions like missing operators/operands/parentheses and so on.
 
-The next step is to use the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert the infix expression to the reverse polish notation (aka postfix expression, eg. `1 + 2 - 3` => `1 2 + 3 -`). I've also added a slight modification by providing unary operators with the highest precedence and right associativity. The evaluation of the postfix expression is pretty easy.
+The next step is to use the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert the infix expression to the reverse polish notation (aka postfix expression, eg. `!a | b & c` => `a ! b c & |`). I've also added a slight modification by providing unary operators with the highest precedence and right associativity. The evaluation of the postfix expression is pretty easy.
 
 
 ### Build from source
 
 ```sh
 make
+```
+
+Run the program:
+
+```sh
+make run
 ```
 
 ### Usage
@@ -27,14 +31,6 @@ You can also toggle the debug mode using the `/debug` command. It will show your
 
 You can autocomplete these commands by pressing tab.
 
-
-### Further Goals
-
-- [x] Support for unary operators
-- [x] Pretty output
-- [x] Input history
-- [x] Tab Completions
-- [ ] Functions
 
 ### Acknowledgements
 

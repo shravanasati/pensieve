@@ -76,6 +76,7 @@ int main(int argc, char const* argv[]) {
         auto interpreter = Interpreter(tokens);
         if (debug) {
             std::cout << yellow(interpreter.getInfix()) << "\n";
+            std::cout << yellow(interpreter.getPostfix()) << "\n";
         }
 
         std::cout << green(std::to_string(interpreter.evaluate())) << "\n";
