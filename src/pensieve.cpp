@@ -26,6 +26,7 @@ int main(int argc, char const* argv[]) {
     linenoiseHistorySetMaxLen(1000);
     const char* histFile = "~/.pensieve_history";
     linenoiseHistoryLoad(histFile);
+    std::cout << std::boolalpha;
 
     std::cout << purple("exit OR quit OR /q to exit") << '\n';
 
@@ -75,12 +76,13 @@ int main(int argc, char const* argv[]) {
 
         auto interpreter = Interpreter(tokens);
         if (debug) {
-            std::cout << yellow(interpreter.getInfix()) << "\n";
-            std::cout << yellow(interpreter.getPostfix()) << "\n";
-            std::cout << yellow(interpreter.getVariables()) << "\n";
+            std::cout << yellow("infix:\t" + interpreter.getInfix()) << "\n";
+            std::cout << yellow("postfix:\t" + interpreter.getPostfix()) << "\n";
+            std::cout << yellow("variables:\t" + interpreter.getVariables()) << "\n";
         }
 
-        std::cout << green(std::to_string(interpreter.evaluate())) << "\n";
+        interpreter.evaluate();
+        // std::cout << green(std::to_string(interpreter.evaluate())) << "\n";
     }
 
     linenoiseHistorySave(histFile);

@@ -35,3 +35,5 @@ You can autocomplete these commands by pressing tab.
 ### Acknowledgements
 
 1. The awesome [linenoise](https://github.com/arangodb/linenoise-ng) library.
+
+2. The supercool [tabulate](https://github.com/p-ranav/tabulate) library.

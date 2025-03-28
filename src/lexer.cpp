@@ -53,7 +53,8 @@ std::vector<Token> Lexer::tokenize() {
             tokens.push_back(RPARENToken());
             bracketPositions.pop();
         } else if (isVariable(currentChar)) {
-            tokens.push_back(VariableToken(std::to_string(currentChar)));
+            auto tempToken = VariableToken(std::string(1, currentChar));
+            tokens.push_back(tempToken);
         } else {
             reportError("invalid character");
             return std::vector<Token>{};
