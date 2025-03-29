@@ -41,6 +41,10 @@ std::vector<Token> Lexer::tokenize() {
             tokens.push_back(AndToken());
         } else if (currentChar == '^') {
             tokens.push_back(XorToken());
+        } else if (currentChar == '>') {
+            tokens.push_back(ImplicationToken());
+        } else if (currentChar == '=') {
+            tokens.push_back(BiconditionalToken());
         } else if (currentChar == '(') {
             tokens.push_back(LPARENToken());
             bracketPositions.push(position);

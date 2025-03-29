@@ -27,18 +27,18 @@ Token VariableToken(std::string name) {
 }
 
 Token NegationToken() {
-    return Token("!", TokenType::NEGATION_OP, 4, Associativity::RIGHT);
+    return Token("!", TokenType::NEGATION_OP, 6, Associativity::RIGHT);
 }
 
-Token OrToken() { return Token("|", TokenType::OR_OP, 1, Associativity::LEFT); }
+Token OrToken() { return Token("|", TokenType::OR_OP, 3, Associativity::LEFT); }
 
 
 Token AndToken() {
-    return Token("&", TokenType::AND_OP, 3, Associativity::LEFT);
+    return Token("&", TokenType::AND_OP, 5, Associativity::LEFT);
 }
 
 Token XorToken() {
-    return Token("^", TokenType::XOR_OP, 2, Associativity::LEFT);
+    return Token("^", TokenType::XOR_OP, 4, Associativity::LEFT);
 }
 
 Token LPARENToken() {
@@ -47,4 +47,12 @@ Token LPARENToken() {
 
 Token RPARENToken() {
     return Token(")", TokenType::RPAREN, 0, Associativity::LEFT);
+}
+
+Token ImplicationToken() {
+    return Token(">", TokenType::IMLPICATION_OP, 2, Associativity::RIGHT);
+}
+
+Token BiconditionalToken() {
+    return Token("=", TokenType::BICONDITIONAL_OP, 1, Associativity::LEFT);
 }

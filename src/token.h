@@ -12,6 +12,8 @@ enum class TokenType {
     OR_OP,
     AND_OP,
     XOR_OP,
+    IMLPICATION_OP,
+    BICONDITIONAL_OP,
     LPAREN,
     RPAREN
 };
@@ -44,6 +46,8 @@ Token NegationToken();
 Token OrToken();
 Token AndToken();
 Token XorToken();
+Token ImplicationToken();
+Token BiconditionalToken();
 Token LPARENToken();
 Token RPARENToken();
 

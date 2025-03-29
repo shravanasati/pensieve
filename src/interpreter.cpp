@@ -133,7 +133,11 @@ long double Interpreter::resolveOperator(Token token,
     case TokenType::AND_OP:
         return (num1 && num2);
     case TokenType::XOR_OP:
-        return (num1 != num2); // Proper logical XOR for booleans
+        return (num1 != num2);
+    case TokenType::IMLPICATION_OP:
+        return !(num1 && !num2);
+    case TokenType::BICONDITIONAL_OP:
+        return num1 == num2;
     default:
         throw std::logic_error("Unknown token type to resolve");
     }
@@ -258,10 +262,10 @@ void Interpreter::displayResultMatrix() {
     bool allFalse = std::all_of(resultCol.begin(), resultCol.end(),
                                 [](bool val) { return !val; });
     if (allTrue) {
-        std::cout << COLOR_GREEN << "`" << expr << "` is a tautology"
+        std::cout << COLOR_YELLOW << "`" << expr << "` is a tautology"
                   << COLOR_RESET << std::endl;
     } else if (allFalse) {
-        std::cout << COLOR_RED << "`" << expr << "` is a contradiction"
+        std::cout << COLOR_YELLOW << "`" << expr << "` is a contradiction"
                   << COLOR_RESET << std::endl;
     }
 }
