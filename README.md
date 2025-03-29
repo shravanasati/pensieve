@@ -1,5 +1,7 @@
 # pensieve
 
+![demo](/assets/demo.png)
+
 A simple truth-table generator written in C++. Expression parsing is performed using the Shunting-yard algorithm.
 
 ### Working mechanism
@@ -8,6 +10,16 @@ pensieve first tokenizes the given input and classifies them into variables, ope
 
 The next step is to use the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert the infix expression to the reverse polish notation (aka postfix expression, eg. `!a | b & c` => `a ! b c & |`). I've also added a slight modification by providing unary operators with the highest precedence and right associativity. The evaluation of the postfix expression is pretty easy.
 
+### Symbol Guide
+
+| Symbol | Meaning       | Pensieve | 
+|--------|---------------|----------|
+| ¬      | NOT           |    !     |
+| ∧      | AND           |    &     |
+| ∨      | OR            |   \|     |
+| →      | IMPLICATION   |    >     |
+| ↔      | BICONDITIONAL |    =     |
+| ⊕      | XOR           |    ^     |
 
 ### Build from source
 
@@ -27,7 +39,7 @@ Just launch the executable file and you'd see a prompt. Enter your expressions h
 
 You can type `/q`, `exit` or `quit` to exit the application.
 
-You can also toggle the debug mode using the `/debug` command. It will show your given expression in a parenthesized manner.
+You can also toggle the debug mode using the `/debug` command. It will show your given expression in the reverse polish notation and the given variables, in order.
 
 You can autocomplete these commands by pressing tab.
 
