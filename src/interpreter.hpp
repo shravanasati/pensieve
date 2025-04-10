@@ -19,14 +19,14 @@ private:
     void convertToPostfix();
     long double resolveOperator(Token token, std::stack<bool>& operands);
     bool evalPostfix(int rowIdx);
-    void displayResultMatrix();
+    std::vector<bool> displayResultMatrix();
 
 public:
     Interpreter(std::vector<Token> tokens);
     std::string getPostfix();
     std::string getInfix();
     std::string getVariables();
-    void evaluate();
+    std::vector<bool> evaluate();
 };
 
 #endif // INTERPRETER_H

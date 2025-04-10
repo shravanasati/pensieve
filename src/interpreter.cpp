@@ -183,10 +183,10 @@ bool Interpreter::evalPostfix(int rowIdx) {
     return operands.top();
 }
 
-void Interpreter::displayResultMatrix() {
+std::vector<bool> Interpreter::displayResultMatrix() {
     if (resultMatrix.empty() || variableNames.empty()) {
         std::cout << "No variables to display in truth table." << std::endl;
-        return;
+        return std::vector<bool>{};
     }
 
     tabulate::Table truthTable;
@@ -268,6 +268,8 @@ void Interpreter::displayResultMatrix() {
         std::cout << COLOR_YELLOW << "`" << expr << "` is a contradiction"
                   << COLOR_RESET << std::endl;
     }
+
+    return resultCol;
 }
 
 Interpreter::Interpreter(std::vector<Token> tokens) : infixTokens(tokens) {
@@ -319,8 +321,9 @@ std::string Interpreter::getVariables() {
     return ss.str();
 }
 
-void Interpreter::evaluate() {
-    displayResultMatrix();
+// Displays the truth table and returns the final result column.
+std::vector<bool> Interpreter::evaluate() {
+    return displayResultMatrix();
     // return evalPostfix();
     // return 0;
 }

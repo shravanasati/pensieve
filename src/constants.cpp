@@ -11,4 +11,5 @@ const std::string COLOR_RESET = "\033[0m";
 std::string purple(std::string s) { return COLOR_PURPLE + s + COLOR_RESET; }
 std::string cyan(std::string s) { return COLOR_CYAN + s + COLOR_RESET; }
 std::string green(std::string s) { return COLOR_GREEN + s + COLOR_RESET; }
+std::string red(std::string s) { return COLOR_RED + s + COLOR_RESET; }
 std::string yellow(std::string s) { return COLOR_YELLOW + s + COLOR_RESET; }

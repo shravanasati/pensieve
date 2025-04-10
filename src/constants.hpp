@@ -17,5 +17,6 @@ std::string purple(std::string s);
 std::string cyan(std::string s);
 std::string green(std::string s);
 std::string yellow(std::string s);
+std::string red(std::string s);
 
 #endif // CONSTANTS_H

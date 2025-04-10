@@ -5,6 +5,20 @@
 #include "stringutils.hpp"
 #include <iostream>
 #include <string.h>
+#include <vector>
+
+template <typename T>
+bool compareVectors(const std::vector<T>& v1, const std::vector<T>& v2) {
+    if (v1.size() != v2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < v1.size(); i++) {
+        if (v1[i] != v2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 /* * LINENOISE CONFIG * */
 
@@ -66,24 +80,52 @@ int main(int argc, char const* argv[]) {
             continue;
         }
 
-        auto lexer = Lexer(input);
-        auto tokens = lexer.tokenize();
-        if (tokens.size() == 0) {
-            // lexer encountered an error during tokenization, the expression is
-            // invalid
-            continue;
+        auto expressions = split(input, ',');
+        std::vector<std::vector<bool>> results; // Remove size initialization
+
+        for (auto& expr : expressions) {
+            trim(expr); // Add trim to remove whitespace from split expressions
+            auto lexer = Lexer(expr);
+            auto tokens = lexer.tokenize();
+            if (tokens.size() == 0) {
+                // lexer encountered an error during tokenization, the
+                // expression is invalid
+                continue;
+            }
+
+            auto interpreter = Interpreter(tokens);
+            if (debug) {
+                std::cout << yellow("postfix:\t" + interpreter.getPostfix())
+                          << "\n";
+                std::cout << yellow("variables:\t" + interpreter.getVariables())
+                          << "\n";
+            }
+
+            auto result = interpreter.evaluate();
+            results.push_back(result);
         }
 
-        auto interpreter = Interpreter(tokens);
-        if (debug) {
-            std::cout << yellow("postfix:\t" + interpreter.getPostfix())
-                      << "\n";
-            std::cout << yellow("variables:\t" + interpreter.getVariables())
-                      << "\n";
-        }
+        if (results.size() > 1) {
+            bool same = true;
+            const auto& firstResult = results[0];
 
-        interpreter.evaluate();
-        // std::cout << green(std::to_string(interpreter.evaluate())) << "\n";
+            for (size_t i = 1; i < results.size(); i++) {
+                if (!compareVectors(results[i], firstResult)) {
+                    same = false;
+                    break;
+                }
+            }
+
+            if (same) {
+                std::cout
+                    << green("All these expressions are logically equivalent")
+                    << std::endl;
+            } else {
+                std::cout
+                    << red("All these expressions are NOT logically equivalent")
+                    << std::endl;
+            }
+        }
     }
 
     linenoiseHistorySave(histFile);
