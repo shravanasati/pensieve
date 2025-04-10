@@ -1,8 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include "constants.h"
-#include "token.h"
+#include "constants.hpp"
+#include "tokens.hpp"
 #include <stack>
 #include <string>
 #include <vector>

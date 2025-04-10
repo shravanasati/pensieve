@@ -1,8 +1,8 @@
-#include "constants.h"
-#include "interpreter.h"
-#include "lexer.h"
+#include "constants.hpp"
+#include "interpreter.hpp"
+#include "lexer.hpp"
 #include "linenoise.h"
-#include "stringutils.h"
+#include "stringutils.hpp"
 #include <iostream>
 #include <string.h>
 
@@ -76,8 +76,10 @@ int main(int argc, char const* argv[]) {
 
         auto interpreter = Interpreter(tokens);
         if (debug) {
-            std::cout << yellow("postfix:\t" + interpreter.getPostfix()) << "\n";
-            std::cout << yellow("variables:\t" + interpreter.getVariables()) << "\n";
+            std::cout << yellow("postfix:\t" + interpreter.getPostfix())
+                      << "\n";
+            std::cout << yellow("variables:\t" + interpreter.getVariables())
+                      << "\n";
         }
 
         interpreter.evaluate();

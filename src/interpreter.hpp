@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-#include "token.h"
+#include "tokens.hpp"
 #include <stack>
 #include <string>
 #include <vector>
@@ -11,10 +11,10 @@ private:
     std::vector<Token> infixTokens;
     std::vector<Token> postfixTokens;
     std::stack<Token> operatorStack;
-	std::vector<std::string> variableNames;
+    std::vector<std::string> variableNames;
     std::vector<std::vector<bool>> resultMatrix;
 
-	std::vector<Token> getVariableTokens();
+    std::vector<Token> getVariableTokens();
     void generateInitialMatrix();
     void convertToPostfix();
     long double resolveOperator(Token token, std::stack<bool>& operands);

@@ -1,4 +1,4 @@
-#include "token.h"
+#include "tokens.hpp"
 
 Token::Token(const std::string& value, TokenType tokenType, int precedence,
              Associativity associativity)
@@ -31,7 +31,6 @@ Token NegationToken() {
 }
 
 Token OrToken() { return Token("|", TokenType::OR_OP, 3, Associativity::LEFT); }
-
 
 Token AndToken() {
     return Token("&", TokenType::AND_OP, 5, Associativity::LEFT);

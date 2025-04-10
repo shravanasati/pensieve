@@ -1,5 +1,5 @@
-#include "interpreter.h"
-#include "constants.h"
+#include "interpreter.hpp"
+#include "constants.hpp"
 #include "tabulate.hpp"
 #include <algorithm>
 #include <cmath>

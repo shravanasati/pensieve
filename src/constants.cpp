@@ -1,4 +1,4 @@
-#include "constants.h"
+#include "constants.hpp"
 
 const std::string COLOR_RED = "\033[31m";
 const std::string COLOR_GREEN = "\033[32m";
