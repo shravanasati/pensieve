@@ -10,6 +10,10 @@ pensieve first tokenizes the given input and classifies them into variables, ope
 
 The next step is to use the [shunting yard algorithm](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) to convert the infix expression to the reverse polish notation (aka postfix expression, eg. `!a | b & c` => `a ! b c & |`). I've also added a slight modification by providing unary operators with the highest precedence and right associativity. The evaluation of the postfix expression is pretty easy.
 
+Once the expression is parsed and the reverse polish notation is generated, the final step is to evaluate the expression and buid a matrix that will repesent the table and render it on the console.
+
+A detailed version of this excerpt can be found on this [report](/pensieve_dm_report.pdf).
+
 ### Symbol Guide
 
 | Symbol | Meaning       | Pensieve | 
@@ -49,3 +53,9 @@ You can autocomplete these commands by pressing tab.
 1. The awesome [linenoise](https://github.com/arangodb/linenoise-ng) library.
 
 2. The supercool [tabulate](https://github.com/p-ranav/tabulate) library.
+
+
+### Future Goals
+
+- [ ] Export tables into multiple formats (CSV, Markdown)
+- [ ] Support multi-character symbols (better tokenizer)
